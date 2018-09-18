@@ -6,6 +6,10 @@ Category: lisp
 */
 
 function(hljs) {
+    var KEYWORDS = {
+	keyword: 'time eval-when block assert declaim with-input-from-string incf tagbody define-symbol-macro with-hash-table-iterator restart-case handler-bind nth-value do* with-package-iterator define-condition with-output-to-string ccase ecase pushnew defconstant loop flet defstruct define-modify-macro function defpackage pprint-logical-block throw prog2 quote pop catch multiple-value-bind decf psetq defmethod progv unless define-compiler-macro prog locally restart-bind untrace prog1 if lambda push when defun progn or return defclass deftype and labels destructuring-bind prog* defgeneric defmacro in-package defvar do-external-symbols psetf macrolet handler-case let with-standard-io-syntax with-open-stream with-condition-restarts print-unreadable-object defparameter multiple-value-list multiple-value-prog1 check-type ignore-errors setf define-method-combination typecase go case step defsetf loop-finish do-symbols ctypecase etypecase multiple-value-setq load-time-value return-from with-open-file with-simple-restart trace shiftf dolist define-setf-expander with-accessors unwind-protect remf rotatef do with-slots cond formatter multiple-value-call symbol-macrolet the let* setq with-compilation-unit dotimes do-all-symbols'
+    };
+
   var LISP_IDENT_RE = '[a-zA-Z_\\-\\+\\*\\/\\<\\=\\>\\&\\#\\.][a-zA-Z0-9_\\-\\+\\*\\/\\<\\=\\>\\&\\#\\.!]*';
   var MEC_RE = '\\|[^]*?\\|';
   var LISP_SIMPLE_NUMBER_RE = '(\\-|\\+)?\\d+(\\.\\d+|\\/\\d+)?((d|e|f|l|s|D|E|F|L|S)(\\+|\\-)?\\d+)?';
@@ -43,7 +47,8 @@ function(hljs) {
   };
   var IDENT = {
     begin: LISP_IDENT_RE,
-    relevance: 0
+    relevance: 0,
+    keywords: KEYWORDS
   };
   var MEC = {
     begin: MEC_RE
@@ -74,20 +79,20 @@ function(hljs) {
     ]
   };
   var LIST = {
-    begin: '\\(\\s*', end: '\\)'
+      begin: '\\(\\s*', end: '\\)'
   };
   var BODY = {
     endsWithParent: true,
     relevance: 0
   };
   LIST.contains = [
-    {
-      className: 'name',
-      variants: [
-        {begin: LISP_IDENT_RE},
-        {begin: MEC_RE}
-      ]
-    },
+      /* {
+       *   className: 'name',
+       *   variants: [
+       *     {begin: LISP_IDENT_RE},
+       *     {begin: MEC_RE}
+       *   ]
+       * }, */
     BODY
   ];
   BODY.contains = [QUOTED, QUOTED_ATOM, LIST, LITERAL, NUMBER, STRING, COMMENT, VARIABLE, KEYWORD, MEC, IDENT];
